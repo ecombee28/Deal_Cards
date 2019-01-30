@@ -1,0 +1,170 @@
+<!---------------------------------------------------------
+ Auther: Eric Combee
+ Date: 11-30-2018
+ Abstract: A simple card API that deals,shuffles,discard
+           and reorders a deck of cards.
+----------------------------------------------------------->
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="Deck.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css'>
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.0.6/css/all.css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+
+
+
+    <div id="cardInfo">
+        <span>
+            <p>Remaining Cards in the Deck:<p id="count">52</p>
+            </p>
+        </span>
+        &nbsp&nbsp<p>Cards in the Discard Pile:</p>
+        <p id="disCount"></p>
+    </div>
+    <div id="cardLayout"></div>
+    <div class="discardBox">
+        <h1>Discard Pile</h1>
+        <div id="discardLayout" ondrop="drop(event)" ondragover="allowDrop(event)">
+        </div>
+    </div>
+
+    <div class="deck">
+        <input type="image" id="dealBtn" onClick="dealCard()" height="170px" width="190px" src="images/deck.png">
+    </div>
+
+    <div class="options">
+
+        <button onClick="shuffle()" id="shuffleBtn" class="btn btn-primary btn-lg shadow ">Shuffle</button>
+        <button onClick="cutDeck()" id="cutBtn" class="btn btn-primary btn-lg shadow">Cut Deck</button>
+        <button onClick="reOrderDeck()" id="orderBtn" class="btn btn-primary btn-lg shadow">Order Deck</button>
+        <button onClick="rePackDeck()" id="rePackDeck" class="btn btn-primary btn-lg shadow">Rebuild Deck</button>
+    </div>
+
+    <script>
+        var myImage = document.getElementById('dealt');
+        var cardCtr = 0;
+        var deck = new Deck();
+        var listOfCards = [];
+        var discardList = [];
+        var shuffledList = [];
+        var cardCount = deck.countCards();
+
+        function dealCard() {
+
+            if (cardCtr < 52) {
+                /***********************
+                 This is just a check to
+                 change the deck image.
+                ************************/
+                if (cardCtr == 48) {
+                    document.getElementById("dealBtn").setAttribute("src", "images/deck1.png");
+                } else if (cardCtr == 49) {
+                    document.getElementById("dealBtn").setAttribute("src", "images/deck2.png");
+                } else if (cardCtr == 50) {
+                    document.getElementById("dealBtn").setAttribute("src", "images/deck3.png");
+                } else if (cardCtr == 51) {
+                    document.getElementById("dealBtn").setAttribute("src", "images/deck0.png");
+                    $('#dealBtn').prop('disabled', true);
+                    $('#cutBtn').prop('disabled', true);
+                    $('#orderBtn').prop('disabled', true);
+                }
+
+                var current;
+
+                /* Every time a new card is dealt it creates a new img element*/
+                deck.dealCard();
+
+
+                listOfCards.push(deck.lastCard());
+                document.getElementById("count").innerHTML = deck.countCards();
+
+            }
+            cardCtr++; // this keeeps track of how many cards have been dealt
+
+        }
+
+        function shuffle() {
+            deck.shuffle();
+            var i = 0;
+            shuffledList = deck.shuffleDiscard(discardList);
+            $('#discardLayout').empty();
+
+            while (i < shuffledList.length) {
+                var elem = document.createElement("img");
+                elem.setAttribute("src", shuffledList[i]);
+                elem.setAttribute("height", "90");
+                elem.setAttribute("width", "90");
+                document.getElementById("discardLayout").appendChild(elem);
+                i++;
+            }
+        }
+
+        /* These functions control the drag and drop function*/
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.target.appendChild(document.getElementById(data));
+            discardList.push(data);
+            document.getElementById("disCount").innerHTML = discardList.length;
+
+
+        }
+
+        function cutDeck() {
+            var cut;
+            var checkCut = false;
+            if (!checkCut) {
+                cut = prompt("Enter a number from 0 to " + deck.countCards() + " to cut deck:");
+                if (cut == null) {
+                    return;
+                } else {
+                    if (cut >= 0 && cut <= (52 - cardCtr)) {
+                        checkCut = true;
+                    } else {
+                        cut = prompt("The postion must be from 0 to " + deck.countCards()); // If cut is outofBounds
+                    }
+                }
+            }
+
+            deck.cut(cut);
+        }
+
+        function reOrderDeck() {
+            deck.reOrder();
+        }
+        window.onload = function count() {
+            document.getElementById("count").innerHTML = deck.countCards();
+        }
+        window.onload = function disCount() {
+            document.getElementById("disCount").innerHTML = discardList.length;
+        }
+
+        function rePackDeck() {
+            deck.repackDeck();
+            deck = new Deck();
+        }
+
+    </script>
+
+</body>
+
+</html>
