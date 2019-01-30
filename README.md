@@ -1,6 +1,9 @@
 # Deal_Cards
 A web program that deals, shuffle, reorders, and discards playing cards. This program uses Javascript to exacute the operations of the program, while HTML and CSS is used for styling.
 # How to Use
+To start the program run the ManageCards.html file in your browser. I have supplied images of all 52 cards in a deck.
+
+
 - **Deal Cards** To deal the cards you simple click on the image of the deck of cards. Once you have reach the end of the cards
 you will no longer be able to deal more cards.
 - **Shuffle Cards** To shuffle cards click on the shuffle cards button. When you shuffle the cards the card's in the discard pile will be shuffled as well.
