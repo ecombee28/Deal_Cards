@@ -7,7 +7,8 @@ you will no longer be able to deal more cards.
 - **Discard cards** To discard cards you simple click and drag the desired card that you wish to discard over to the discard pile.
 - **Cut the Deck** To cut the deck you select the cut deck button. Once it is selected you will be asked were in the deck do you want to cut the deck at. Once you selected the place you want to cut the deck the bottom half will be placed on top of the top half.
 - **Order Cards** When the cards are first delt they are in order if you choose to reorder the deck after it has been shuffled or delt, simply select the oreder deck button.
--**Rebuild Deck** This button simple restartes the program over again.
+- **Rebuild Deck** This button simple restartes the program over again.
+
 
 
 
